@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis de Registro de Muertes</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- External Libraries -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Hero Banner -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Análisis de Registro de Muertes</h1>
+            <p>Visualización interactiva de datos sobre la proporción de muertes registradas en diferentes países</p>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <ul>
+            <li><a href="#visualizaciones">Visualizaciones</a></li>
+            <li><a href="#filtros">Filtros</a></li>
+            <li><a href="#documentacion">Documentación</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Diagonal Filters Section -->
+            <div class="diagonal-filters">
+                <aside class="filters" id="filtros">
+                    <h2>Filtros</h2>
+                    <div class="filter-group">
+                        <label for="year-select">Año:</label>
+                        <select id="year-select" class="custom-select"></select>
+                    </div>
+                    <div class="filter-group">
+                        <label>Países:</label>
+                        <div class="country-selection">
+                            <div class="country-checkboxes" id="country-select"></div>
+                            <div class="select-actions">
+                                <button class="action-button" onclick="selectAllCountries()">Seleccionar Todos</button>
+                                <button class="action-button secondary" onclick="deselectAllCountries()">Deseleccionar Todos</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-info">
+                        <p>Seleccione los países que desea comparar y el año para visualizar los datos</p>
+                    </div>
+                </aside>
+            </div>
+
+            <!-- Content Wrapper -->
+            <div class="content-wrapper">
+                <!-- Visualizations Section -->
+                <section class="visualizations" id="visualizaciones">
+                    <div class="chart-container">
+                        <h3>Evolución Temporal</h3>
+                        <div class="chart-description">
+                            <p>Muestra la tendencia de registro de muertes a lo largo del tiempo para los países seleccionados</p>
+                        </div>
+                        <div id="time-series-chart"></div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Comparación por País</h3>
+                        <div class="chart-description">
+                            <p>Compara la proporción de muertes registradas entre diferentes países para el año seleccionado</p>
+                        </div>
+                        <div id="bar-chart"></div>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <h3>Distribución Geográfica</h3>
+                        <div class="chart-description">
+                            <p>Visualiza la distribución global de los registros de muertes en un mapa interactivo</p>
+                        </div>
+                        <div id="map-chart"></div>
+                    </div>
+                </section>
+
+                <!-- Documentation Section -->
+                <section class="documentation" id="documentacion">
+            <h2>Documentación</h2>
+            
+            <div class="doc-tabs">
+                <button class="tab-button active" onclick="openTab(event, 'fuente')">Fuente y Estructura</button>
+                <button class="tab-button" onclick="openTab(event, 'variables')">Variables Clave</button>
+                <button class="tab-button" onclick="openTab(event, 'analisis')">Tipos de Análisis</button>
+                <button class="tab-button" onclick="openTab(event, 'funcionalidades')">Funcionalidades</button>
+            </div>
+
+            <div id="fuente" class="tab-content active">
+                <h3>Fuente y Estructura de los Datos</h3>
+                <p>Los datos provienen de "Nuestro Mundo en Datos" y contienen información sobre la proporción de muertes registradas en diferentes países a lo largo del tiempo. La estructura incluye:</p>
+                <ul>
+                    <li><strong>Entidad:</strong> Nombre del país</li>
+                    <li><strong>Código:</strong> Código del país</li>
+                    <li><strong>Año:</strong> Año de registro</li>
+                    <li><strong>Proporción de muertes registradas:</strong> Porcentaje de muertes registradas</li>
+                </ul>
+            </div>
+
+            <div id="variables" class="tab-content">
+                <h3>Variables Clave y Cobertura</h3>
+                <p>El conjunto de datos abarca:</p>
+                <ul>
+                    <li>Período temporal: 2015-2019</li>
+                    <li>Cobertura geográfica: 10 países de América Latina</li>
+                    <li>Variable principal: Proporción de muertes registradas (%)</li>
+                </ul>
+            </div>
+
+            <div id="analisis" class="tab-content">
+                <h3>Tipos de Análisis Disponibles</h3>
+                <ul>
+                    <li><strong>Evolución temporal:</strong> Análisis de tendencias a lo largo del tiempo</li>
+                    <li><strong>Comparación entre países:</strong> Análisis comparativo entre diferentes regiones</li>
+                    <li><strong>Distribución geográfica:</strong> Visualización de patrones espaciales</li>
+                    <li><strong>Análisis de tendencias:</strong> Identificación de mejoras significativas</li>
+                </ul>
+            </div>
+
+            <div id="funcionalidades" class="tab-content">
+                <h3>Funcionalidades Interactivas</h3>
+                <ul>
+                    <li>Selección múltiple de países para comparación</li>
+                    <li>Filtrado por año</li>
+                    <li>Visualización de tendencias y cambios</li>
+                    <li>Tooltips informativos en gráficos</li>
+                    <li>Mapa interactivo con información detallada</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Reflection Section -->
+        <section class="reflection">
+            <h2>Reflexión Final</h2>
+            <div class="reflection-content">
+                <p>El análisis de los datos de registro de muertes en América Latina revela tendencias importantes:</p>
+                <ul>
+                    <li>La mayoría de los países muestran una mejora constante en el registro de muertes durante el período 2015-2019.</li>
+                    <li>Países como Argentina y Chile mantienen tasas de registro superiores al 98%, estableciendo un estándar regional.</li>
+                    <li>Se observa una brecha significativa entre países, con algunos mostrando tasas de registro por debajo del 95%.</li>
+                    <li>Las mejoras más notables se han dado en países que inicialmente tenían tasas más bajas, indicando esfuerzos efectivos por fortalecer sus sistemas de registro.</li>
+                </ul>
+                <p>Estas observaciones sugieren que, aunque existe un progreso general en la región, aún hay oportunidades de mejora en algunos países para alcanzar los niveles más altos de registro observados en la región.</p>
+            </div>
+        </section>
+
+    <footer>
+        <div class="footer-content">
+            <p>Datos proporcionados por Nuestro Mundo en Datos</p>
+            <p>Desarrollado con D3.js y Leaflet</p>
+            <p>© 2025 - Todos los derechos reservados</p>
+            <p>Desarrollado por Luisa Acosta</p>
+        </div>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            // Hide all tab contents
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(tc => tc.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(btn => btn.classList.remove('active'));
+
+            // Show current tab and add active class to button
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+    </script>
+
+    <!-- Custom JavaScript -->
+    <script src="js/app.js"></script>
+</body>
+</html>
